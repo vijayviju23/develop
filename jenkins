@@ -2,20 +2,43 @@ pipeline {
     agent any
 
     stages {
+        stage('Checkout') {
+            steps {
+                // Checkout source code from your version control system (e.g., Git)
+                checkout scm
+            }
+        }
+
         stage('Build') {
             steps {
-                echo 'Building..'
+                // Build your application (e.g., Maven, Gradle)
+                sh 'mvn clean install'
             }
         }
+
         stage('Test') {
             steps {
-                echo 'Testing..'
+                // Run your tests
+                sh 'mvn test'
             }
         }
+
         stage('Deploy') {
             steps {
-                echo 'Deploying....'
+                // Deploy your application (this is a simplified example)
+                sh 'deploy_script.sh'
             }
+        }
+    }
+
+    post {
+         success {
+            // Send notifications or perform actions on success
+            echo 'Build and deployment successful!'
+        }
+        failure {
+            // Send notifications or perform actions on failure
+            echo 'Build or deployment failed!'
         }
     }
 }
